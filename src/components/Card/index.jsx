@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { ShoppingCartContext } from "../../context";
-import { PlusIcon } from "@heroicons/react/16/solid";
+import { PlusIcon, CheckIcon } from "@heroicons/react/16/solid";
 
 function Card(data) {
   const context = useContext(ShoppingCartContext);
@@ -9,6 +9,69 @@ function Card(data) {
     context.openProductDetail();
     context.setProductToShow(productDetail);
   };
+
+  /*  
+  const addProductsToCart = (productData) => {
+    context.setCount(context.count + 1);
+    context.setCartProducts([...context.cartProducts, productData]);
+    context.openCheckoutSideMenu();
+    console.log(context.cartProducts);
+  };
+*/
+
+  const addProductsToCart = (productData) => {
+    context.setCount(context.count + 1);
+
+    const productIndex = context.cartProducts.findIndex(
+      (item) => item.id === productData.id
+    );
+
+    if (productIndex >= 0) {
+      const updatedCartProducts = [...context.cartProducts];
+      updatedCartProducts[productIndex].quantity =
+        (updatedCartProducts[productIndex].quantity || 1) + 1;
+      context.setCartProducts(updatedCartProducts);
+    } else {
+      context.setCartProducts([
+        ...context.cartProducts,
+        { ...productData, quantity: 1 },
+      ]);
+    }
+
+    context.openCheckoutSideMenu();
+    console.log(context.cartProducts);
+  };
+
+  const renderIcon = (id) => {
+    const isInCart =
+      context.cartProducts.filter((product) => product.id === id).length > 0;
+    if (isInCart) {
+      return (
+        <div
+          className="absolute top-0 right-0 flex justify-center items-center m-2 bg-lime-500 w-6 h-6 rounded-full text-white transition transform duration-200 hover:scale-110"
+          onClick={(e) => {
+            e.stopPropagation();
+            context.openCheckoutSideMenu();
+          }}
+        >
+          <CheckIcon className="h-4 w-4" />
+        </div>
+      );
+    } else {
+      return (
+        <div
+          className="absolute top-0 right-0 flex justify-center items-center m-2 bg-white w-6 h-6 rounded-full transition transform duration-200 hover:scale-110"
+          onClick={(e) => {
+            e.stopPropagation();
+            addProductsToCart(data.data);
+          }}
+        >
+          <PlusIcon className="h-4 w-4" />
+        </div>
+      );
+    }
+  };
+
   return (
     <div className="bg-white cursor-pointer w-56 h-60 rounded-lg">
       <figure
@@ -23,17 +86,9 @@ function Card(data) {
         <img
           className="w-full h-full object-cover rounded-lg"
           src={data.data.images[0]}
-          alt="imagen Audifonos"
+          alt={data.data.title}
         />
-        <div
-          className="absolute top-0 right-0 flex justify-center items-center m-2 bg-white w-6 h-6 rounded-full transition transform duration-200 hover:scale-110"
-          onClick={(e) => {
-            e.stopPropagation();
-            context.setCount(context.count + 1);
-          }}
-        >
-          <PlusIcon className="h-4 w-4" />
-        </div>
+        {renderIcon(data.data.id)}
       </figure>
       <p className="flex justify-between">
         <span className="text-sm font-light">{data.data.title}</span>

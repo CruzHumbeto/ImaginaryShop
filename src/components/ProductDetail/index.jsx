@@ -4,15 +4,15 @@ import { ShoppingCartContext } from "../../context";
 
 function ProductDetail() {
   const context = useContext(ShoppingCartContext);
-  console.log("Product to show: ", context.productToShow);
+  //console.log("Product to show: ", context.productToShow);
   return (
     <aside
       className={`${
         context.isProductDetailOpen ? "flex" : "hidden"
-      } w-[360px] h-[calc(100vh-56px)] flex-col fixed top-[56px] right-0 backdrop-blur-xl bg-slate-100/80 border border-black rounded-lg`}
+      } w-[360px] h-[calc(100vh-56px)] flex-col fixed top-[56px] right-0 backdrop-blur-xl bg-slate-100/80 border border-black rounded-lg overflow-y-scroll`}
     >
       <div className="flex justify-between items-center p-4">
-        <h2 className="font-medium text-xl">Detail</h2>
+        <h2 className="font-medium text-xl">DETAIL</h2>
         <div>
           <XCircleIcon
             className="size-6 hover:text-red-600"
