@@ -47,18 +47,18 @@ function Navbar() {
         </li>
         <li>
           <NavLink
-            to="/toys"
+            to="/shoes"
             className={({ isActive }) => (isActive ? activeStyle : undefined)}
           >
-            Toys
+            Shoes
           </NavLink>
         </li>
         <li>
           <NavLink
-            to="/others"
+            to="/miscellaneous"
             className={({ isActive }) => (isActive ? activeStyle : undefined)}
           >
-            Others
+            Miscellaneous
           </NavLink>
         </li>
       </ul>

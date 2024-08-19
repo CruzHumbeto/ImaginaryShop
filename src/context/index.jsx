@@ -1,8 +1,19 @@
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect } from "react";
 
 export const ShoppingCartContext = createContext();
 
 export const ShoppingCartProvider = ({ children }) => {
+  //Get products
+  const [items, setItems] = useState(null);
+
+  // Get products by title
+  const [searchByTitle, setSearchByTitle] = useState(null);
+  const [filteredItems, setFilteredItems] = useState(null);
+
+  // Get products by category
+  const [filteredCategoryItems, setFilteredCategoryItems] = useState(null);
+  const [currentCategory, setCurrentCategory] = useState("");
+
   // Shopping cart - Increment quantity
   const [count, setCount] = useState(0);
 
@@ -34,10 +45,40 @@ export const ShoppingCartProvider = ({ children }) => {
   // Chechout side menu - checkout order
   const [order, setOrder] = useState([]);
 
-  console.log("Count " + count);
+  // Get products from API
+  useEffect(() => {
+    fetch("https://api.escuelajs.co/api/v1/products")
+      .then((response) => response.json())
+      .then((data) => setItems(data));
+  }, []);
+
+  // Get products by title - filtering
+  const filteredItemsByTitle = (items, serchByTitle) => {
+    return items?.filter((item) =>
+      item.title.toLowerCase().includes(serchByTitle.toLowerCase())
+    );
+  };
+  useEffect(() => {
+    if (searchByTitle) {
+      setFilteredItems(filteredItemsByTitle(items, searchByTitle));
+    }
+  }, [items, searchByTitle]);
+
+  // Get products by category
+  const filteredItemsByCategory = (items, category) => {
+    return items?.filter((item) =>
+      item.category.name.toLowerCase().includes(category.toLowerCase())
+    );
+  };
+  useEffect(() => {
+    setFilteredCategoryItems(filteredItemsByCategory(items, currentCategory));
+  }, [items, currentCategory]);
+
   return (
     <ShoppingCartContext.Provider
       value={{
+        items,
+        setItems,
         count,
         setCount,
         openProductDetail,
@@ -53,6 +94,14 @@ export const ShoppingCartProvider = ({ children }) => {
         closeCheckoutSideMenu,
         order,
         setOrder,
+        searchByTitle,
+        setSearchByTitle,
+        filteredItems,
+        setFilteredItems,
+        filteredCategoryItems,
+        setFilteredCategoryItems,
+        currentCategory,
+        setCurrentCategory,
       }}
     >
       {children}
