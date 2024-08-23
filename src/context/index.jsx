@@ -11,8 +11,7 @@ export const ShoppingCartProvider = ({ children }) => {
   const [filteredItems, setFilteredItems] = useState(null);
 
   // Get products by category
-  const [filteredCategoryItems, setFilteredCategoryItems] = useState(null);
-  const [currentCategory, setCurrentCategory] = useState("");
+  const [currentCategory, setCurrentCategory] = useState(null);
 
   // Shopping cart - Increment quantity
   const [count, setCount] = useState(0);
@@ -52,27 +51,45 @@ export const ShoppingCartProvider = ({ children }) => {
       .then((data) => setItems(data));
   }, []);
 
-  // Get products by title - filtering
-  const filteredItemsByTitle = (items, serchByTitle) => {
+  // Get products by title
+  const filteredItemsByTitle = (items, searchByTitle) => {
     return items?.filter((item) =>
-      item.title.toLowerCase().includes(serchByTitle.toLowerCase())
+      item.title.toLowerCase().includes(searchByTitle.toLowerCase())
     );
   };
-  useEffect(() => {
-    if (searchByTitle) {
-      setFilteredItems(filteredItemsByTitle(items, searchByTitle));
-    }
-  }, [items, searchByTitle]);
-
   // Get products by category
   const filteredItemsByCategory = (items, category) => {
     return items?.filter((item) =>
       item.category.name.toLowerCase().includes(category.toLowerCase())
     );
   };
+
+  // filtering products
+  const filterType = {
+    totalFilter: (items, searchByTitle, currentCategory) =>
+      filteredItemsByCategory(items, currentCategory).filter((item) =>
+        item.title.toLowerCase().includes(searchByTitle.toLowerCase())
+      ),
+    categoryFilter: (items, currentCategory) =>
+      filteredItemsByCategory(items, currentCategory),
+    titleFilter: (items, searchByTitle) =>
+      filteredItemsByTitle(items, searchByTitle),
+  };
+
   useEffect(() => {
-    setFilteredCategoryItems(filteredItemsByCategory(items, currentCategory));
-  }, [items, currentCategory]);
+    if (searchByTitle && currentCategory) {
+      setFilteredItems(
+        filterType.totalFilter(items, searchByTitle, currentCategory)
+      );
+    }
+    if (currentCategory && !searchByTitle) {
+      setFilteredItems(filterType.categoryFilter(items, currentCategory));
+    }
+
+    if (!currentCategory && searchByTitle) {
+      setFilteredItems(filterType.titleFilter(items, searchByTitle));
+    }
+  }, [items, searchByTitle, currentCategory]);
 
   return (
     <ShoppingCartContext.Provider
@@ -98,8 +115,6 @@ export const ShoppingCartProvider = ({ children }) => {
         setSearchByTitle,
         filteredItems,
         setFilteredItems,
-        filteredCategoryItems,
-        setFilteredCategoryItems,
         currentCategory,
         setCurrentCategory,
       }}
