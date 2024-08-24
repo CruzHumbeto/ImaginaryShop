@@ -17,29 +17,8 @@ const AppRoutes = () => {
       path: "/",
       element: <Home />,
     },
-
     {
-      path: "/clothes",
-      element: <Home />,
-    },
-
-    {
-      path: "/electronics",
-      element: <Home />,
-    },
-
-    {
-      path: "/furnitures",
-      element: <Home />,
-    },
-
-    {
-      path: "/shoes",
-      element: <Home />,
-    },
-
-    {
-      path: "/miscellaneous",
+      path: "/home/:categoryProduct",
       element: <Home />,
     },
     {

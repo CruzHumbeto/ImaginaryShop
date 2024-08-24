@@ -1,5 +1,6 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 
+import { useLocation, useParams } from "react-router-dom";
 import { ShoppingCartContext } from "../../context";
 import Layout from "../../components/Layuot";
 import Card from "../../components/Card";
@@ -8,7 +9,9 @@ import CheckoutSideMenu from "../../components/CheckoutSideMenu";
 import { FaceFrownIcon } from "@heroicons/react/24/outline";
 
 function Home() {
+  const location = useLocation();
   const context = useContext(ShoppingCartContext);
+  const { categoryProduct } = useParams();
   const renderView = () => {
     const itemsToRender =
       context.searchByTitle?.length > 0 || context.currentCategory?.length > 0
@@ -25,6 +28,15 @@ function Home() {
       );
     }
   };
+
+  useEffect(() => {
+    if (categoryProduct?.length > 0) {
+      context.setCurrentCategory(categoryProduct.toLocaleLowerCase());
+    }
+  }, [categoryProduct]);
+  useEffect(() => {
+    context.setSearchByTitle(null);
+  }, [location]);
 
   return (
     <Layout>

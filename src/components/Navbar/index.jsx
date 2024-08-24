@@ -24,7 +24,7 @@ function Navbar() {
         </li>
         <li>
           <NavLink
-            to="/clothes"
+            to="/home/clothes"
             className={({ isActive }) => (isActive ? activeStyle : undefined)}
             onClick={() => context.setCurrentCategory("clothes")}
           >
@@ -33,7 +33,7 @@ function Navbar() {
         </li>
         <li>
           <NavLink
-            to="/electronics"
+            to="/home/electronics"
             className={({ isActive }) => (isActive ? activeStyle : undefined)}
             onClick={() => context.setCurrentCategory("electronics")}
           >
@@ -42,7 +42,7 @@ function Navbar() {
         </li>
         <li>
           <NavLink
-            to="/furnitures"
+            to="/home/furniture"
             className={({ isActive }) => (isActive ? activeStyle : undefined)}
             onClick={() => context.setCurrentCategory("furniture")}
           >
@@ -51,7 +51,7 @@ function Navbar() {
         </li>
         <li>
           <NavLink
-            to="/shoes"
+            to="/home/shoes"
             className={({ isActive }) => (isActive ? activeStyle : undefined)}
             onClick={() => context.setCurrentCategory("shoes")}
           >
@@ -60,7 +60,7 @@ function Navbar() {
         </li>
         <li>
           <NavLink
-            to="/miscellaneous"
+            to="/home/miscellaneous"
             className={({ isActive }) => (isActive ? activeStyle : undefined)}
             onClick={() => context.setCurrentCategory("miscellaneous")}
           >
